@@ -172,7 +172,7 @@ export async function downloadProduct(account: Account, app: Software, versionId
     dispatchEndpoint(bag.redownloadURL, 'redownload', account.deviceIdentifier) ??
     redownloadEndpoint(account.deviceIdentifier);
   const response = await send(redownload, pinnedVersion);
-  const emptyServerError = response.status === 500 && !response.body.trim();
+  const emptyServerError = (response.status === 500 || response.status === 403) && !response.body.trim();
   if (!emptyServerError) dict = responseDict(response, redownload);
   const recoverable =
     !emptyServerError && needsDownloadFallback(dict) && (Boolean(dict.failureType) || Boolean(dict.customerMessage));
